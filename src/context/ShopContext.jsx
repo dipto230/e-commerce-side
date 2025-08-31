@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { products } from "../assets/frontend_assets/assets";
 import { toast } from "react-toastify";
+import Product from './../pages/Product';
 
 
 export const ShopContext = createContext();
@@ -55,12 +56,30 @@ const ShopContextProvider = (props) => {
         setCartItems(cartData);
         
     }
+    const getCartAmount = () => {
+        let totalAmount = 0;
+        for (const items in cartItems) {
+            let itemInfo = products.find((product) => product._id === items);
+            for (const item in cartItems[items]) {
+                try {
+                    if (cartItems[items][item] > 0) {
+                        totalAmount += itemInfo.price * cartItems[items][item];
+                    }
+                    
+                } catch {
+                    
+                }
+            }
+        }
+        return totalAmount;
+    }
 
     const value = {
         products, currency, delivery_fee,
         search, setSearch, showSearch, setShowSearch,
         cartItems, addToCart,
-        getCartCount, updateQuantity
+        getCartCount, updateQuantity,
+        getCartAmount
         
     }
     return (
